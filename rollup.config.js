@@ -7,7 +7,7 @@ function configure(esm) {
       ? { format: 'es', dir: 'dist', entryFileNames: '[name].mjs', sourcemap: true }
       : {
           format: 'umd',
-          name: 'SetArray',
+          name: 'setArray',
           dir: 'dist',
           entryFileNames: '[name].umd.js',
           sourcemap: true,
