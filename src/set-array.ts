@@ -10,6 +10,11 @@ export let get: (strarr: SetArray, key: string) => number | undefined;
 export let put: (strarr: SetArray, key: string) => number;
 
 /**
+ * Pops the last added item out of the SetArray.
+ */
+export let pop: (strarr: SetArray) => void;
+
+/**
  * SetArray acts like a `Set` (allowing only one occurrence of a string `key`), but provides the
  * index of the `key` in the backing array.
  *
@@ -18,7 +23,7 @@ export let put: (strarr: SetArray, key: string) => number;
  * and there are never duplicates.
  */
 export class SetArray {
-  private declare _indexes: { [key: string]: number };
+  private declare _indexes: { [key: string]: number | undefined };
   declare array: readonly string[];
 
   constructor() {
@@ -37,6 +42,14 @@ export class SetArray {
       const { array, _indexes: indexes } = strarr;
 
       return (indexes[key] = (array as string[]).push(key) - 1);
+    };
+
+    pop = (strarr) => {
+      const { array, _indexes: indexes } = strarr;
+      if (array.length === 0) return;
+
+      const last = (array as string[]).pop()!;
+      indexes[last] = undefined;
     };
   }
 }
