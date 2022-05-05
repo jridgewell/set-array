@@ -11,6 +11,7 @@
   "typings": "dist/types/set-array.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/types/set-array.d.ts",
       "browser": "./dist/set-array.umd.js",
       "require": "./dist/set-array.umd.js",
       "import": "./dist/set-array.mjs"
