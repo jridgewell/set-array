@@ -63,3 +63,20 @@ export function pop<T extends Key>(setarr: SetArray<T>): void {
   const last = array.pop()!;
   indexes[last] = undefined;
 }
+
+/**
+ * Removes the key, if it exists in the set.
+ */
+export function remove<T extends Key>(setarr: SetArray<T>, key: T): void {
+  const index = get(setarr, key);
+  if (index === undefined) return;
+
+  const { array, _indexes: indexes } = cast(setarr);
+  for (let i = index + 1; i < array.length; i++) {
+    const k = array[i];
+    array[i - 1] = k;
+    indexes[k]!--;
+  }
+  indexes[key] = undefined;
+  array.pop();
+}
