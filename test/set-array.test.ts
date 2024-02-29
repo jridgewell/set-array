@@ -1,20 +1,20 @@
-const { SetArray, get, put, pop } = require('..');
-const assert = require('assert');
+import { SetArray, get, put, pop } from '../src/set-array';
+import { strict as assert } from 'assert';
 
 describe('SetArray', () => {
   describe('get()', () => {
     it('returns undefined if not present', () => {
       const array = new SetArray();
 
-      assert.strictEqual(get(array, 'test'), undefined);
-      assert.strictEqual(get(array, 'foo'), undefined);
+      assert.equal(get(array, 'test'), undefined);
+      assert.equal(get(array, 'foo'), undefined);
 
       put(array, 'test');
-      assert.strictEqual(get(array, 'test'), 0);
+      assert.equal(get(array, 'test'), 0);
 
-      assert.strictEqual(get(array, 'foo'), undefined);
+      assert.equal(get(array, 'foo'), undefined);
       put(array, 'foo');
-      assert.strictEqual(get(array, 'foo'), 1);
+      assert.equal(get(array, 'foo'), 1);
 
       assert.deepEqual(array.array, ['test', 'foo']);
     });
@@ -43,9 +43,9 @@ describe('SetArray', () => {
     it('returns index of string in array', () => {
       const array = new SetArray();
 
-      assert.strictEqual(put(array, 'test'), 0);
-      assert.strictEqual(put(array, 'foo'), 1);
-      assert.strictEqual(put(array, 'bar'), 2);
+      assert.equal(put(array, 'test'), 0);
+      assert.equal(put(array, 'foo'), 1);
+      assert.equal(put(array, 'bar'), 2);
     });
 
     it('returns original index of string in array', () => {
@@ -55,16 +55,16 @@ describe('SetArray', () => {
       put(array, 'foo');
       put(array, 'bar');
 
-      assert.strictEqual(put(array, 'test'), 0);
-      assert.strictEqual(put(array, 'foo'), 1);
-      assert.strictEqual(put(array, 'bar'), 2);
+      assert.equal(put(array, 'test'), 0);
+      assert.equal(put(array, 'foo'), 1);
+      assert.equal(put(array, 'bar'), 2);
     });
 
     it('handles empty string', () => {
       const array = new SetArray();
 
-      assert.strictEqual(put(array, ''), 0);
-      assert.strictEqual(put(array, ''), 0);
+      assert.equal(put(array, ''), 0);
+      assert.equal(put(array, ''), 0);
       assert.deepEqual(array.array, ['']);
     });
   });
@@ -90,7 +90,7 @@ describe('SetArray', () => {
 
       put(array, 'test');
       pop(array);
-      assert.strictEqual(get(array, 'test'), undefined);
+      assert.equal(get(array, 'test'), undefined);
     });
 
     it('putting afterwards writes to array at old index', () => {
@@ -108,7 +108,7 @@ describe('SetArray', () => {
       put(array, 'test');
       pop(array);
       put(array, 'foo');
-      assert.strictEqual(get(array, 'foo'), 0);
+      assert.equal(get(array, 'foo'), 0);
     });
   });
 });
