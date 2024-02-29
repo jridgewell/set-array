@@ -29,9 +29,3 @@ jobs:
       - name: Test node
         run: |
           node dist/set-array.umd.js
-      - name: Benchmark
-        run: |
-          npm run benchmark:install
-          npm run benchmark:only
-        env:
-          CI: true
