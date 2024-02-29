@@ -8,7 +8,7 @@ type Key = string | number | symbol;
  * like how in a sourcemap `sourcesContent[i]` is the source content associated with `source[i]`,
  * and there are never duplicates.
  */
-export class SetArray<T extends Key> {
+export class SetArray<T extends Key = Key> {
   private declare _indexes: Record<T, number | undefined>;
   declare array: readonly T[];
 
