@@ -1,4 +1,4 @@
-type Key = string;
+type Key = string | number | symbol;
 
 /**
  * SetArray acts like a `Set` (allowing only one occurrence of a string `key`), but provides the
