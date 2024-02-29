@@ -1,18 +1,4 @@
-/**
- * Gets the index associated with `key` in the backing array, if it is already present.
- */
-export let get: (strarr: SetArray, key: string) => number | undefined;
-
-/**
- * Puts `key` into the backing array, if it is not already present. Returns
- * the index of the `key` in the backing array.
- */
-export let put: (strarr: SetArray, key: string) => number;
-
-/**
- * Pops the last added item out of the SetArray.
- */
-export let pop: (strarr: SetArray) => void;
+type Key = string;
 
 /**
  * SetArray acts like a `Set` (allowing only one occurrence of a string `key`), but provides the
@@ -22,34 +8,58 @@ export let pop: (strarr: SetArray) => void;
  * like how in a sourcemap `sourcesContent[i]` is the source content associated with `source[i]`,
  * and there are never duplicates.
  */
-export class SetArray {
-  private declare _indexes: { [key: string]: number | undefined };
-  declare array: readonly string[];
+export class SetArray<T extends Key> {
+  private declare _indexes: Record<T, number | undefined>;
+  declare array: readonly T[];
 
   constructor() {
     this._indexes = { __proto__: null } as any;
     this.array = [];
   }
+}
 
-  static {
-    get = (strarr, key) => strarr._indexes[key];
+interface PublicSet<T extends Key> {
+  array: T[];
+  _indexes: SetArray<T>['_indexes'];
+}
 
-    put = (strarr, key) => {
-      // The key may or may not be present. If it is present, it's a number.
-      const index = get(strarr, key);
-      if (index !== undefined) return index;
+/**
+ * Typescript doesn't allow friend access to private fields, so this just casts the set into a type
+ * with public access modifiers.
+ */
+function cast<T extends Key>(set: SetArray<T>): PublicSet<T> {
+  return set as any;
+}
 
-      const { array, _indexes: indexes } = strarr;
+/**
+ * Gets the index associated with `key` in the backing array, if it is already present.
+ */
+export function get<T extends Key>(setarr: SetArray<T>, key: T): number | undefined {
+  return cast(setarr)._indexes[key];
+}
 
-      return (indexes[key] = (array as string[]).push(key) - 1);
-    };
+/**
+ * Puts `key` into the backing array, if it is not already present. Returns
+ * the index of the `key` in the backing array.
+ */
+export function put<T extends Key>(setarr: SetArray<T>, key: T): number {
+  // The key may or may not be present. If it is present, it's a number.
+  const index = get(setarr, key);
+  if (index !== undefined) return index;
 
-    pop = (strarr) => {
-      const { array, _indexes: indexes } = strarr;
-      if (array.length === 0) return;
+  const { array, _indexes: indexes } = cast(setarr);
 
-      const last = (array as string[]).pop()!;
-      indexes[last] = undefined;
-    };
-  }
+  const length = array.push(key);
+  return (indexes[key] = length - 1);
+}
+
+/**
+ * Pops the last added item out of the SetArray.
+ */
+export function pop<T extends Key>(setarr: SetArray<T>): void {
+  const { array, _indexes: indexes } = cast(setarr);
+  if (array.length === 0) return;
+
+  const last = array.pop()!;
+  indexes[last] = undefined;
 }
